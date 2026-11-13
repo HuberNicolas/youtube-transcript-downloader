@@ -1,0 +1,6 @@
+/data
+/transcripts
+__pycache__/
+.venv/
+.ruff_cache/
+.DS_Store
