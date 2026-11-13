@@ -1,6 +1,7 @@
 """Command-line interface."""
 
 import argparse
+import time
 from pathlib import Path
 
 from youtube_transcript_api import YouTubeTranscriptApi
@@ -13,7 +14,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         prog="yt-transcript",
         description="Download the transcripts of YouTube videos.",
     )
-    parser.add_argument("videos", nargs="*", help="video URLs or IDs")
+    parser.add_argument("videos", nargs="*", help="video or playlist URLs or IDs")
     parser.add_argument(
         "-f", "--file", type=Path, action="append", default=[], help="file with one URL or ID per line (repeatable)"
     )
@@ -28,6 +29,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="preferred languages in order, comma-separated (default: de,en)",
     )
     parser.add_argument("--format", choices=FORMATTERS, default="txt", help="output format (default: %(default)s)")
+    parser.add_argument(
+        "--delay", type=float, default=1.0, help="seconds to wait between videos, against IP blocks (default: 1)"
+    )
     parser.add_argument("--strict", action="store_true", help="fail instead of falling back to another language")
     args = parser.parse_args(argv)
     if not args.videos and not args.file:
@@ -41,6 +45,8 @@ def main(argv: list[str] | None = None) -> int:
     api = YouTubeTranscriptApi()
     failed = 0
     for i, video_id in enumerate(ids, 1):
+        if i > 1:
+            time.sleep(args.delay)
         try:
             path = download(video_id, args.out, args.lang, args.format, api, args.strict)
             print(f"[{i}/{len(ids)}] {video_id} -> {path}")

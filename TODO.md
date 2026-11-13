@@ -9,7 +9,9 @@ Open tasks. See also [Known issues](README.md#known-issues).
 - [x] Use uv, youtube-transcript-api 1.2 and Python 3.12+
 - [x] Read list files, accept all common URL forms, add output formats and a language fallback
 - [x] Test a real run on a list of 20 videos (20 downloaded)
-- [ ] Add tests for `extract_video_id` and `read_sources`
+- [x] Expand playlist URLs and IDs with yt-dlp; add `--delay` against IP blocks
+- [ ] Test downloading a whole playlist (the playlist was expanded, but the test IP was blocked by then)
+- [ ] Add tests for `extract_video_id`, `extract_playlist_id` and `read_sources`
 - [ ] Optional: translate transcripts with `--translate LANG`
 
 ## 2. Publish
